@@ -1,10 +1,10 @@
 var currentPage = null;
-var maxPageHeight = 820;
+var maxPageHeight = 870;
 
 var wrapper = function() {
     var html = `
-    <div class="m-container">
-        <div id="printS4">
+    <div class="pdf-page">
+        <div id="page-content">
             <div class="container-fluid">
                 ${process_section_1()}
             </div>
@@ -155,11 +155,11 @@ var process_section_2 = function(callback, options) {
     </div>
     `);
 
-    currentPage.find('#printS4').append(html);
+    currentPage.find('#page-content').append(html);
 
     var addAtleastOneStop = function() {
         
-        html = currentPage.find('#printS4 .instructions');
+        html = currentPage.find('#page-content .instructions');
         
         var oneStopHtml = $(`
         <div class="row mb-3" style="color: red;">
@@ -192,7 +192,7 @@ var process_section_2 = function(callback, options) {
 
     var addComments = function() {
         
-        html = currentPage.find('#printS4 .instructions');
+        html = currentPage.find('#page-content .instructions');
 
         for (let index = 0, sliceCount = 0; index < printTemplate.data.Comments.length; index++) {
             const comment = printTemplate.data.Comments[index];
@@ -270,7 +270,7 @@ var process_section_3 = function(callback, options) {
     </div>
     `);
 
-    currentPage.find('#printS4').append(html);
+    currentPage.find('#page-content').append(html);
 
     if(!okToAdd()) {
         $html.remove();
@@ -280,7 +280,7 @@ var process_section_3 = function(callback, options) {
     }
 
     var addIngredientRows = function() {
-        html = currentPage.find('#printS4 .section3');
+        html = currentPage.find('#page-content .section3');
         
         var tbody = html.find('.section3-ingredients tbody');
         for (let index = 0, sliceCount = 0; index < printTemplate.data.Ingredients.length; index++) {
@@ -314,7 +314,7 @@ var addNewPage = function(isPageBreak) {
 }
 
 var okToAdd = function() {
-    return maxPageHeight >= currentPage.find('#printS4').innerHeight();
+    return maxPageHeight >= currentPage.find('#page-content').innerHeight();
 }
 
 var startProcess = function() {
@@ -332,10 +332,12 @@ var pdfOptions = {
     putOnlyUsedFonts:true
 };
 
+window.jsPDF = window.jspdf.jsPDF;
+
 var saveAsPdf = function () {
-    var doc = new jspdf.jsPDF(pdfOptions);
-    var elementHTML = document.querySelector(".m-container");
-    var windowWidth = $('#printS4').innerWidth();
+    var doc = new jsPDF(pdfOptions);
+    var elementHTML = document.querySelector(".pdf-page");
+    var windowWidth = $('#page-content').innerWidth();
     doc.html(elementHTML, {
         callback: function (doc) {
         // Save the PDF
@@ -357,6 +359,45 @@ var saveAsPdf = function () {
     doc.addFont("lato-bold.ttf", "lato", "bold");
 };
 
+function generatePdf(doc, index, callback) {
+    if($('.pdf-page').length > index) {
+
+        const html = $('.pdf-page:eq(' + index +')')[0];
+
+        // var w = 800;
+        // var h = 1642;
+        var w = 1200;
+        var h = 2042;
+        var canvas = document.createElement('canvas');
+        canvas.width = w*2;
+        canvas.height = h*2;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        var context = canvas.getContext('2d');
+        //context.scale(2,2);
+        context.scale(3,3);
+
+        html2canvas(html, { canvas: canvas }).then(function(canvas) {
+            //const imgWidth = 210.5;
+            const imgWidth = 210.5;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            doc.addImage(canvas, 'PNG', 0, 0, imgWidth, imgHeight, '', 'FAST');
+            
+            index = index + 1;
+            
+            if($('.pdf-page').length > index)
+                doc.addPage();
+
+            generatePdf(doc, index, callback);
+            return;
+        });
+    }
+    else {
+        if(callback) callback(doc);
+    }
+}
+
 var generateBarcodes = function() {
     for(var i = 0; i < barCodeCount; i++) {
         var $canvas = $('#bar-code-' + i);
@@ -375,6 +416,13 @@ var renderPDF = function() {
     startProcess();
     generateBarcodes();
     //setTimeout(function() { saveAsPdf(); }, 500);
+    setTimeout(function() { 
+        const doc = new jsPDF('p', 'mm');
+        var finishCallBack = function(doc) {
+            doc.save('Downld.pdf');
+        }
+        generatePdf(doc, 0, finishCallBack);
+    }, 500);
 }
 
 $(document).ready(function() {

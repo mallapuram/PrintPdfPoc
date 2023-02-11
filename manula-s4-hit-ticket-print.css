@@ -24,7 +24,7 @@ body {
     transition: left 500ms;
 }
 
-#printS4 {
+#page-content {
     background: #fff;
     margin: 0 auto;
     /*padding: 13px;*/
@@ -37,10 +37,10 @@ body {
     margin: 10px auto;
 }
 
-.m-container {
+.pdf-page {
     padding: 10px;
     background: #fff;
-    height: 822px;
+    height: 882px;
     width: 620px;
     margin: 0px auto;
     box-shadow: 0px 0px 3px 1px #000;

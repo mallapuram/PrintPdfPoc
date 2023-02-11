@@ -1,7 +1,7 @@
 var printTemplate = {
     "isDataLoaded": true,
     "data": {
-      "isAtleastOneStopPrsnt":true,
+      "isAtleastOneStopPrsnt":false,
       "AdjustmentOrder": null,
       "MaterialCode": "B13231781         ",
       "ProductCode": null,
