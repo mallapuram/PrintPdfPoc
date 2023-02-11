@@ -24,7 +24,7 @@ var printTemplate = {
       "Ingredients": [
         {
           "IngredientMaterialCode": "D10325583         ",
-          "Quantity": "6.0000",
+          "Quantity": "0.2000",
           "AdjustmentPercentage": "0.6545",
           "Unit": "LB",
           "IngredientDescription": "D10325583             G- 1438 UNKNOWN",
@@ -32,7 +32,7 @@ var printTemplate = {
         },
         {
           "IngredientMaterialCode": "D10220945         ",
-          "Quantity": "4.0000",
+          "Quantity": "0.5000",
           "AdjustmentPercentage": "0.4363",
           "Unit": "LB",
           "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
@@ -56,7 +56,7 @@ var printTemplate = {
         },
         {
           "IngredientMaterialCode": "D10894051         ",
-          "Quantity": "3.0000",
+          "Quantity": "0.2000",
           "AdjustmentPercentage": "0.3272",
           "Unit": "LB",
           "IngredientDescription": "D10894051             H-  936 UNKNOWN",
@@ -80,7 +80,7 @@ var printTemplate = {
         },
         {
           "IngredientMaterialCode": "D10220945         ",
-          "Quantity": "4.0000",
+          "Quantity": "0.33000",
           "AdjustmentPercentage": "0.4363",
           "Unit": "LB",
           "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
@@ -117,7 +117,135 @@ var printTemplate = {
           "Unit": "LB",
           "IngredientDescription": "M20000592            RCS47621 UNKNOWN",
           "SCode": ""
-        }
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D10220945         ",
+          "Quantity": "0.33000",
+          "AdjustmentPercentage": "0.4363",
+          "Unit": "LB",
+          "IngredientDescription": "D10220945             G- 1698 UNKNOWN",
+          "SCode": ""
+        },
+        {
+          "IngredientMaterialCode": "D11569454         ",
+          "Quantity": "5.0000",
+          "AdjustmentPercentage": "0.5454",
+          "Unit": "LB",
+          "IngredientDescription": "D11569454             G-36773 Clear",
+          "SCode": ""
+        },
       ],
       "Comments": [
         "Run At-Line Tests: Viscosity Color.",
