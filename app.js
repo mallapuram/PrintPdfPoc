@@ -364,8 +364,6 @@ function generatePdf(doc, index, callback) {
 
         const html = $('.pdf-page:eq(' + index +')')[0];
 
-        // var w = 800;
-        // var h = 1642;
         var w = 1200;
         var h = 2042;
         var canvas = document.createElement('canvas');
@@ -374,11 +372,9 @@ function generatePdf(doc, index, callback) {
         canvas.style.width = w + 'px';
         canvas.style.height = h + 'px';
         var context = canvas.getContext('2d');
-        //context.scale(2,2);
         context.scale(3,3);
 
         html2canvas(html, { canvas: canvas }).then(function(canvas) {
-            //const imgWidth = 210.5;
             const imgWidth = 210.5;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
