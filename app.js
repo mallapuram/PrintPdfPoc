@@ -1,11 +1,12 @@
+var currentPage = null;
+var maxPageHeight = 820;
+
 var wrapper = function() {
     var html = `
     <div class="m-container">
         <div id="printS4">
             <div class="container-fluid">
-                ${section1()}
-                ${section2()}
-                ${section3()}
+                ${process_section_1()}
             </div>
         </div>
     </div>
@@ -13,7 +14,7 @@ var wrapper = function() {
     return $(html);
 }
 
-var section1 = function() {
+var process_section_1 = function() {
     var html = `
         <div class="row mb-2">
             <div class="col-12 info-text">
@@ -140,52 +141,87 @@ var section1 = function() {
     return html;
 }
 
-var section2 = function() {
-    var getComments = function() {
-        var list = [];
-        (printTemplate.data.Comments || []).forEach(function(comment) {
-            list.push(`<div class="mb-1"> ${comment}</div>`);
-        });
-        return list.join('\n');
-    }
-    var html = `
-    <div class="instructions">
+var process_section_2 = function(callback, options) {
+    options = options || {};
+    printTemplate.data.Comments = (printTemplate.data.Comments || []);
+    
+    var html = $(`
+    <div class="instructions section2">
         <div class="row mb-3">
-            <div class="col-12">
-                <label class="form-label col-auto fw-bold pe-2">Special instructions:</label>
-                ${getComments()}
+            <div class="col-12 section2-comments">
+                <label class="form-label col-auto fw-bold pe-2${(options.hideHeaders ? ' d-none' : '')}">Special instructions:</label>
             </div>
         </div>
-        `+ (printTemplate.data.isAtleastOneStopPrsnt 
-            ?  `<div class="row mb-3" style="color: red;">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-auto pe-1">
-                                <img ng-src="stop_sign.png" alt="" width="40" />
-                            </div>
-                            <div class="col-auto pe-1 fw-bold">
-                                Caution, the correction steps below include adjustments under 1 Unit
-                            </div>
-                            <div class="col fw-bold">
-                                H/F/R:
-                            </div>
+    </div>
+    `);
+
+    currentPage.find('#printS4').append(html);
+
+    var addAtleastOneStop = function() {
+        
+        html = currentPage.find('#printS4 .instructions');
+        
+        var oneStopHtml = $(`
+        <div class="row mb-3" style="color: red;">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-auto pe-1">
+                        <img src="stop_sign.png" alt="" width="40" />
+                    </div>
+                    <div class="col-auto pe-1 fw-bold d-inline-flex-center">
+                        Caution, the correction steps below include adjustments under 1 Unit
+                        <div class="col fw-bold ps-3">
+                            H/F/R:
                         </div>
                     </div>
-                </div>` 
-            : ``) 
-        +`
-    </div>
-    `;
-    return html;
+                    
+                </div>
+            </div>
+        </div>`);
+
+        if(printTemplate.data.isAtleastOneStopPrsnt) {
+            html.append(oneStopHtml);
+            if(!okToAdd()) {
+                oneStopHtml.remove();
+                addNewPage(true);
+                process_section_2(addAtleastOneStop, options);
+                return;
+            }
+        }
+    }
+
+    var addComments = function() {
+        
+        html = currentPage.find('#printS4 .instructions');
+
+        for (let index = 0, sliceCount = 0; index < printTemplate.data.Comments.length; index++) {
+            const comment = printTemplate.data.Comments[index];
+            const $comment = $(`<div class="mb-1">${comment}</div>`);
+            html.find('.section2-comments').append($comment);
+            if(!okToAdd()) {
+                $comment.remove();
+                printTemplate.data.Comments.splice(0, sliceCount);
+                addNewPage(true);
+                $.extend(options, { hideHeaders : false});
+                process_section_2(addComments, options);
+                return;
+            }
+            else sliceCount++
+        }
+        addAtleastOneStop();
+    }
+
+    callback = callback ?? addComments;
+    callback();
 }
 
-var section3 = function(options) {
+var process_section_3 = function(callback, options) {
     options = options || {};
-    var getRows = function() {
-        var list = [];
-        (printTemplate.data.Ingredients || []).forEach(function(item, index) {
-            list.push(`
-            <tr ng-repeat="item in printTemplate.data.Ingredients" class="border-bottom">
+    printTemplate.data.Ingredients = (printTemplate.data.Ingredients || []);
+
+    var getRow = function(item, index) {
+        return $(`
+            <tr class="border-bottom">
                 <td scope="row">${index + 1}</td>
                 <td align="right">
                     `+ 
@@ -211,13 +247,11 @@ var section3 = function(options) {
                 <td align="left"><div class="under-line"></div></td>
             </tr>
         `);
-        });
-        return list.join('\n');
     }
-    var html = `
-    <div class="col-grid">
-        <table class="table" style="width: 100%;">
-            <thead class="border-bottom border-top pt-2 pb-2${(options.hideHeaders ? ' d-none' : '')}">
+    var html = $(`
+    <div class="col-grid section3">
+        <table class="table section3-ingredients${(options.hideHeaders ? ' table-no-header' : '')}" style="width: 100%;">
+            <thead class="border-bottom border-top pt-2 pb-2">
                 <tr>
                     <th scope="col" align="left">Item</th>
                     <th scope="col" align="left" class="text-nowrap">S code</th>
@@ -230,14 +264,65 @@ var section3 = function(options) {
                 </tr>
             </thead>
             <tbody>
-                ${getRows()}
+                
             </tbody>
         </table>
     </div>
-    `;
+    `);
 
-    return html;
+    currentPage.find('#printS4').append(html);
+
+    if(!okToAdd()) {
+        $html.remove();
+        addNewPage(true);
+        process_section_3(callback, options);
+        return;
+    }
+
+    var addIngredientRows = function() {
+        html = currentPage.find('#printS4 .section3');
+        
+        var tbody = html.find('.section3-ingredients tbody');
+        for (let index = 0, sliceCount = 0; index < printTemplate.data.Ingredients.length; index++) {
+            const rowItem = printTemplate.data.Ingredients[index];
+            var slNo = index + (options.ingredientIndex || 0);
+            const $rowItem = getRow(rowItem, slNo);
+            tbody.append($rowItem);
+
+            if(!okToAdd()) {
+                $rowItem.remove();
+                printTemplate.data.Ingredients.splice(0, sliceCount);
+                addNewPage(true);
+                $.extend(options, { hideHeaders : true, ingredientIndex: slNo});
+                process_section_3(addIngredientRows, options);
+                return;
+            }
+            else sliceCount++
+        }
+    }
+
+    callback = callback ?? addIngredientRows;
+    callback();
 }
+
+var addNewPage = function(isPageBreak) {
+    if(isPageBreak) {
+        currentPage.append($('<div class="page-continue">Continued on next page</div>'))
+        $(document.body).append($('<div class="page-break"></div>'));
+    }
+    currentPage = wrapper().appendTo('body');
+}
+
+var okToAdd = function() {
+    return maxPageHeight >= currentPage.find('#printS4').innerHeight();
+}
+
+var startProcess = function() {
+    addNewPage();
+    process_section_2();
+    process_section_3();
+}
+
 var pdfSize = 203;
 var barCodeCount = (printTemplate.data.Ingredients || []).length;
 var pdfOptions = {
@@ -246,6 +331,7 @@ var pdfOptions = {
     format: 'a4',
     putOnlyUsedFonts:true
 };
+
 var saveAsPdf = function () {
     var doc = new jspdf.jsPDF(pdfOptions);
     var elementHTML = document.querySelector(".m-container");
@@ -270,6 +356,7 @@ var saveAsPdf = function () {
     doc.addFont("lato.ttf", "lato", "normal");
     doc.addFont("lato-bold.ttf", "lato", "bold");
 };
+
 var generateBarcodes = function() {
     for(var i = 0; i < barCodeCount; i++) {
         var $canvas = $('#bar-code-' + i);
@@ -283,14 +370,16 @@ var generateBarcodes = function() {
         });
     }
 }
+
 var renderPDF = function() {
+    startProcess();
     generateBarcodes();
-    setTimeout(function() { saveAsPdf(); }, 500);
+    //setTimeout(function() { saveAsPdf(); }, 500);
 }
 
 $(document).ready(function() {
 
     var $body = $(document.body);
-    $body.append(wrapper());
+    //$body.append(wrapper());
     renderPDF();
 });
