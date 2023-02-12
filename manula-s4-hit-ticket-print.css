@@ -160,6 +160,8 @@ label {
 .info-text {
     font-size: 12px;
     font-weight:600;
+    width: calc(100% - 50px);
+    margin-left: 10px;
 }
 table {
     border-collapse: collapse;
@@ -201,4 +203,37 @@ table th, table td {
 
 .d-none {
     display: none;
+}
+
+
+
+@media print {
+    @page {
+        margin:15px;    
+    }
+     body {
+         margin:none;
+         zoom:1.125;
+         font-size:13px;
+     }
+    .pdf-page {
+        width:100%;
+        height:100%;
+        margin:none;
+        page-break-after:always;
+        box-shadow:none;
+        padding:0;
+    }
+    .page-break {
+        display:none;
+    }
+    .page-continue {
+        text-align: center;
+        font-weight:normal;
+        position: fixed;
+        bottom: 2px;
+        width: 100%;
+        border-top: 1px dashed#CCC;
+        font-size: 10px;
+    }
 }

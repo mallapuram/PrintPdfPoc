@@ -17,6 +17,7 @@ var wrapper = function() {
 var process_section_1 = function() {
     var html = `
         <div class="row mb-2">
+            <img src="axalta_logo.png" width="30px" />
             <div class="col-12 info-text">
                 This hit ticket was printed directly from AxCS. Please dispose of the duplicate one that will be printing from SAP with the same Deviation Code.
             </div>
@@ -291,7 +292,7 @@ var process_section_3 = function(callback, options) {
             tbody.append($rowItem);
 
             generateBarcode($rowItem.find('canvas'));
-            
+
             if(!okToAdd()) {
                 $rowItem.remove();
                 printTemplate.data.Ingredients.splice(0, sliceCount);
