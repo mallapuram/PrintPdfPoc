@@ -398,12 +398,24 @@ var generateBarcode = function($canvas) {
     });
 }
 
+var loader = (function() {
+    return {
+        show : function() {
+            $('.loader').show();
+        },
+        hide: function() {
+            $('.loader').fadeOut(1000);
+        }
+    }
+})();
+
 var renderPDF = function() {
-    startProcess();
     //generateBarcodes();
+    loader.show();
     setTimeout(function() { 
         const doc = new jsPDF('p', 'mm');
         var finishCallBack = function(doc) {
+            loader.hide();
             doc.save('Downld.pdf');
         }
         generatePdf(doc, 0, finishCallBack);
@@ -411,8 +423,13 @@ var renderPDF = function() {
 }
 
 $(document).ready(function() {
-
+    printTemplate.data.Ingredients = printTemplate.data.Ingredients.sort(function(a, b) { 
+        if(b.IngredientDescription < a.IngredientDescription) return -1;
+        if(b.IngredientDescription > a.IngredientDescription) return 1;
+        return 0;
+    });
     var $body = $(document.body);
     //$body.append(wrapper());
+    startProcess();
     renderPDF();
 });
