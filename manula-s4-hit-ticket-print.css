@@ -266,13 +266,15 @@ table th, table td {
 @keyframes load8
 {
   0% {transform:rotate(0deg)} 
-  to {transform:rotate(1turn)
+  to {transform:rotate(1turn)}
 }
 
 @media print {
+    
     @page {
         margin:15px;    
     }
+
      body {
          margin:none;
          zoom:1.125;
@@ -286,9 +288,10 @@ table th, table td {
         box-shadow:none;
         padding:0;
     }
-    .page-break {
+    .page-break, .loader, .download-icon {
         display:none;
     }
+    
     .page-continue {
         text-align: center;
         font-weight:normal;
@@ -298,8 +301,5 @@ table th, table td {
         border-top: 1px dashed#CCC;
         font-size: 10px;
     }
-
-    .loader, .download-icon {
-        display: none;
-    }
 }
+
