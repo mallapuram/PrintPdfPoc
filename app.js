@@ -230,7 +230,7 @@ var process_section_3 = function(callback, options) {
                     +`
                     <span>${item.SCode}</span>
                     <div class="barcode-container">
-                        <canvas data-bcode="${ printTemplate.getBcode(item) }" id="bar-code-${index}" style="width: 125px">
+                        <canvas data-bcode="${ getBcode(item) }" id="bar-code-${index}" style="width: 125px">
                         </canvas>
                     </div>
                 </td>
@@ -343,17 +343,7 @@ function generatePdf(doc, index, callback) {
 
         const html = $('.pdf-page:eq(' + index +')')[0];
 
-        var w = 1200;
-        var h = 2042;
-        var canvas = document.createElement('canvas');
-        canvas.width = w*2;
-        canvas.height = h*2;
-        canvas.style.width = w + 'px';
-        canvas.style.height = h + 'px';
-        var context = canvas.getContext('2d');
-        context.scale(3,3);
-
-        html2canvas(html, { canvas: canvas }).then(function(canvas) {
+        html2canvas(html, { scale: 3 }).then(function(canvas) {
             const imgWidth = 210.5;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -398,20 +388,20 @@ var generateBarcode = function($canvas) {
     });
 }
 
-var loader = (function() {
+var loader = (function () {
     return {
-        show : function() {
+        show: function (message) {
+            $('.loader .loading-message').text(message || '');
             $('.loader').show();
         },
-        hide: function() {
+        hide: function () {
             $('.loader').fadeOut(1000);
         }
     }
 })();
 
 var renderPDF = function() {
-    //generateBarcodes();
-    loader.show();
+    loader.show('Download in progress');
     setTimeout(function() { 
         const doc = new jsPDF('p', 'mm');
         var finishCallBack = function(doc) {
@@ -420,6 +410,14 @@ var renderPDF = function() {
         }
         generatePdf(doc, 0, finishCallBack);
     }, 500);
+}
+
+var getBcode = function (ingredient) {
+    var processOrder = ('000000000000' + $.trim(printTemplate.data.ProcessOrder || '')).slice(-12);
+    var materialCode = $.trim(ingredient.IngredientMaterialCode || '');
+    var quantity = parseFloat(ingredient.Quantity || '0').toFixed(3);
+    var bcode = processOrder + materialCode + quantity;
+    return bcode;
 }
 
 $(document).ready(function() {
